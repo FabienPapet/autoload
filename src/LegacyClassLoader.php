@@ -64,8 +64,16 @@ final class LegacyClassLoader
         );
 
         if ($enableOverrides) {
+            //Iterate locating each core directory inside the override directories
+            $overrideDirectories = [];
+            foreach($this->overrideDirectories as $overrideDirectory){
+                foreach($this->coreDirectories as $coreDirectory){
+                    $overrideDirectories[] = $overrideDirectory.DIRECTORY_SEPARATOR.$coreDirectory;
+                }
+            }
+
             $overrideClasses = $this->parseClasses(
-                $this->loadClasses($this->overrideDirectories)
+                $this->loadClasses($overrideDirectories)
             );
 
             $classes = array_merge($classes, $overrideClasses);
